@@ -4,14 +4,15 @@ export class Product {
   public rating: number;
   public review_count: number;
   public href: string;
-  public description: string;
   public imageSrc: string;
   public imageAlt: string;
   public discount: number;
   public status: number;
   public brandId: number;
   public stock: number;
-
+  public description: string;
+  public long_description: string;
+  public features: string;
   constructor(
     public name: string,
     public price: number,
