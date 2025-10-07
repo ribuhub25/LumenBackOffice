@@ -11,7 +11,11 @@ export interface ProductDTO {
     imageAlt: string,
     discount: number,
     status: number,
-    brandId: number,
+    brand_Id: number,
     stock: number,
-    category: string
+    brand_name: string,
+    code: string,
+    final_price: number,
+    is_new: boolean,
+    categories: Array<Object>
 }

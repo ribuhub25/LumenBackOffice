@@ -1,6 +1,7 @@
 import { ProductRepository } from "../../domain/services/ProductRepository";
 import { Product } from "../../domain/models/Product";
 import { supabase } from "../config/supabaseClient";
+import { ProductDTO } from "../../application/dto/ProductDTO";
 
 
 export class ProductRepositoryImpl implements ProductRepository {
@@ -27,7 +28,7 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async findAll(): Promise<Product[]> {
-     const { data, error } = await supabase.from("product").select("*");
+     const { data, error } = await supabase.from("v_products").select("*");
 
      if (error) throw new Error(error.message);
      return data || [];
