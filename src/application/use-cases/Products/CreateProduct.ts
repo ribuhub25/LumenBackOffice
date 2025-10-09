@@ -7,10 +7,10 @@ export class CreateProduct {
 
   async execute(dto: ProductDTO): Promise<Product> {
 <<<<<<< HEAD
-    const product: Product = new Product(dto.name, dto.price);
-=======
     const product: Product = new Product();
->>>>>>> 3efba90 (Se incluyo los metodos para listar los combos de marca y categorias)
+=======
+    const product: Product = new Product(dto.name, dto.price);
+>>>>>>> 9752216 (Se agregaron los metodos para buscar marcas y buscar un producto por el id)
     return await this.repository.save(product);
   }
 }

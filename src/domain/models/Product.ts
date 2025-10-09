@@ -13,6 +13,13 @@ export class Product {
   public description: string;
   public long_description: string;
   public features: string;
+<<<<<<< HEAD
+=======
+  constructor(
+    public name: string,
+    public price: number,
+  ) {}
+>>>>>>> 9752216 (Se agregaron los metodos para buscar marcas y buscar un producto por el id)
 }
 
   
