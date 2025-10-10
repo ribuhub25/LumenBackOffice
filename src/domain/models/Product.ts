@@ -13,10 +13,6 @@ export class Product {
   public description: string;
   public long_description: string;
   public features: string;
-  constructor(
-    public name: string,
-    public price: number,
-  ) {}
 }
 
   
