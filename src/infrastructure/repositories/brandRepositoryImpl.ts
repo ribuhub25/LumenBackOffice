@@ -1,17 +1,11 @@
-<<<<<<< HEAD
-=======
+
 import { BrandDTO } from "../../application/dto/BrandDTO";
 import { Option } from "../../application/dto/Option";
->>>>>>> 3efba90 (Se incluyo los metodos para listar los combos de marca y categorias)
 import { Brand } from "../../domain/models/Brand";
 import { BrandRepository } from "../../domain/services/BrandRepository";
 import { supabase } from "../config/supabaseClient";
 
 export class BrandRepositoryImpl implements BrandRepository {
-<<<<<<< HEAD
-
-=======
->>>>>>> 3efba90 (Se incluyo los metodos para listar los combos de marca y categorias)
   async save(brand: Brand): Promise<Brand> {
     const { data, error } = await supabase
       .from("brand")
@@ -35,15 +29,7 @@ export class BrandRepositoryImpl implements BrandRepository {
   }
 
   async findAll(): Promise<Brand[]> {
-<<<<<<< HEAD
-     const { data, error } = await supabase.from("brand").select("*");
-
-     if (error) throw new Error(error.message);
-     return data || [];
-
-=======
     const { data, error } = await supabase.from("brand").select("*");
-
     if (error) throw new Error(error.message);
     return data || [];
   }
@@ -57,18 +43,12 @@ export class BrandRepositoryImpl implements BrandRepository {
       value: brand.id.toString(),
       label: brand.name,
     }));
->>>>>>> 3efba90 (Se incluyo los metodos para listar los combos de marca y categorias)
   }
 
   async delete(id: number): Promise<void> {
     const { error } = await supabase.from("brand").delete().eq("id", id);
 
     if (error) throw new Error(error.message);
-<<<<<<< HEAD
 
   }
-
-=======
-  }
->>>>>>> 3efba90 (Se incluyo los metodos para listar los combos de marca y categorias)
 }

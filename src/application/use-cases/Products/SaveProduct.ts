@@ -5,6 +5,6 @@ export class SaveProduct {
   constructor(private readonly repository: ProductRepository) {}
 
   async execute(product: Product): Promise<Product> {
-    return await this.repository.save(product);
+    return await this.repository.update(product);
   }
 }

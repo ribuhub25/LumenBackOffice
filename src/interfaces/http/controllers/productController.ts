@@ -2,21 +2,15 @@ import { Request, Response } from "express";
 import { CreateProduct } from "../../../application/use-cases/Products/CreateProduct";
 import { ProductRepositoryImpl } from "../../../infrastructure/repositories/productRepositoryImpl";
 import { GetProducts } from "../../../application/use-cases/Products/GetProducts";
-import { GetProduct } from "../../../application/use-cases/Products/GetProduct";
-<<<<<<< HEAD
 import { SaveProduct } from "../../../application/use-cases/Products/SaveProduct";
 import { Product } from "../../../domain/models/Product";
-=======
->>>>>>> 9752216 (Se agregaron los metodos para buscar marcas y buscar un producto por el id)
+import { GetProduct } from "../../../application/use-cases/Products/GetProduct";
 
 const repository = new ProductRepositoryImpl();
 const cu_create_product = new CreateProduct(repository); 
 const cu_get_products = new GetProducts(repository); 
 const cu_get_product = new GetProduct(repository);
-<<<<<<< HEAD
 const cu_save_product = new SaveProduct(repository);
-=======
->>>>>>> 9752216 (Se agregaron los metodos para buscar marcas y buscar un producto por el id)
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
@@ -46,7 +40,6 @@ export const getProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
-<<<<<<< HEAD
 
 export const saveProduct = async (req: Request, res: Response) => {
   try{
@@ -60,8 +53,6 @@ export const saveProduct = async (req: Request, res: Response) => {
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }
-=======
->>>>>>> 9752216 (Se agregaron los metodos para buscar marcas y buscar un producto por el id)
 
 function isProduct(obj: any): obj is Product {
   return (
