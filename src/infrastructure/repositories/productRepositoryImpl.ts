@@ -18,7 +18,7 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async findById(id: number): Promise<Product | null> {
     const { data, error } = await supabase
-      .from("product")
+      .from("v_products")
       .select("*")
       .eq("id", id)
       .single();
