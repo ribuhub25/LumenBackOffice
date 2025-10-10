@@ -6,7 +6,7 @@ export class CreateProduct {
   constructor(private readonly repository: ProductRepository) {}
 
   async execute(dto: ProductDTO): Promise<Product> {
-    const product: Product = new Product(dto.name, dto.price, dto.category);
+    const product: Product = new Product();
     return await this.repository.save(product);
   }
 }

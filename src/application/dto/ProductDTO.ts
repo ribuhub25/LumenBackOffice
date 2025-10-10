@@ -17,5 +17,5 @@ export interface ProductDTO {
     code: string,
     final_price: number,
     is_new: boolean,
-    categories: Array<Object>
+    categories: Array<object>
 }
