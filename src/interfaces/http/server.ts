@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require('cors');
 
 import productRoutes from "./routes/productRoutes";
+import authRoutes from "./routes/authRoutes";
+import brandRoutes from "./routes/brandRoutes";
+
 const app = express();
 
 app.use(cors({
@@ -12,6 +15,8 @@ app.use(cors({
 
 app.use(express.json());
 
-app.use("/api", productRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/brands",brandRoutes);
 
 export default app;

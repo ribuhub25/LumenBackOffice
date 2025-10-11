@@ -13,6 +13,8 @@ export class Product {
   public description: string;
   public long_description: string;
   public features: string;
+  public name: string;
+  public price: number;
 }
 
   

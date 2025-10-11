@@ -18,7 +18,7 @@ export class ProductRepositoryImpl implements ProductRepository {
 
   async findById(id: number): Promise<Product | null> {
     const { data, error } = await supabase
-      .from("product")
+      .from("v_products")
       .select("*")
       .eq("id", id)
       .single();
@@ -28,10 +28,10 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async findAll(): Promise<Product[]> {
-     const { data, error } = await supabase.from("v_products").select("*");
+    const { data, error } = await supabase.from("v_products").select("*");
 
-     if (error) throw new Error(error.message);
-     return data || [];
+    if (error) throw new Error(error.message);
+    return data || [];
 
   }
 
@@ -41,4 +41,20 @@ export class ProductRepositoryImpl implements ProductRepository {
     if (error) throw new Error(error.message);
 
   }
+
+  async update(product: Product): Promise<Product> {
+    const { id, ...fieldsToUpdate } = product;
+    console.log(product);
+    
+    const { data, error } = await supabase
+      .from("product")
+      .update(fieldsToUpdate)
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (error) throw new Error(`Error al actualizar el producto: ${error.message}`);
+    return data;
+  }
+
 }
