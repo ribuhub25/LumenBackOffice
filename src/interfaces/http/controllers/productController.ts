@@ -42,11 +42,10 @@ export const getProduct = async (req: Request, res: Response) => {
 };
 
 export const saveProduct = async (req: Request, res: Response) => {
-  try{
-    // if(!(isProduct(req.body))){
-    //   return res.status(400).json({ error: "Formato del Producto Invalido" });
-    // }
-    const result = await cu_save_product.execute(req.body);
+  try {
+    const token = req.supabaseToken;
+    if (!token) return res.status(401).json({ error: "Token no disponible" });
+    const result = await cu_save_product.execute(req.body, token);
     res.status(200).json(result);
   }catch(error){
     console.error("❌ Error al guardar el producto:", error.message);

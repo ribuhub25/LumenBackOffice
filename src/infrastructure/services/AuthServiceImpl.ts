@@ -14,6 +14,10 @@ export class AuthServiceImpl {
     if (error || !data.session?.access_token) {
       throw new Error(error?.message || "Credenciales inválidas");
     }
+    await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    });
     return data.session.access_token;
   }
 }

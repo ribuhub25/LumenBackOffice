@@ -1,8 +1,7 @@
 import { ProductRepository } from "../../domain/services/ProductRepository";
 import { Product } from "../../domain/models/Product";
 import { supabase } from "../config/supabaseClient";
-import { ProductDTO } from "../../application/dto/ProductDTO";
-
+import getSupabaseClientWithToken from "../config/supabaseWithToken";
 
 export class ProductRepositoryImpl implements ProductRepository {
   async save(product: Product): Promise<Product> {
@@ -32,29 +31,43 @@ export class ProductRepositoryImpl implements ProductRepository {
 
     if (error) throw new Error(error.message);
     return data || [];
-
   }
 
   async delete(id: number): Promise<void> {
     const { error } = await supabase.from("product").delete().eq("id", id);
 
     if (error) throw new Error(error.message);
-
   }
 
-  async update(product: Product): Promise<Product> {
+  async update(product: Product, token: string): Promise<Product> {
     const { id, ...fieldsToUpdate } = product;
-    console.log(product);
-    
-    const { data, error } = await supabase
+    const supabaseToken = getSupabaseClientWithToken(token);
+    if (!id) throw new Error("El producto debe tener un ID válido");
+
+    const {
+      error: updateError,
+      data,
+      status,
+    } = await supabaseToken.from("product").update(fieldsToUpdate).eq("id", id);
+
+    if (updateError)
+      throw new Error(
+        `Error al actualizar el producto: ${updateError.message}`
+      );
+
+    const { data: updatedProduct, error: fetchError } = await supabase
       .from("product")
-      .update(fieldsToUpdate)
+      .select("*")
       .eq("id", id)
-      .select()
-      .maybeSingle();
+      .single();
 
-    if (error) throw new Error(`Error al actualizar el producto: ${error.message}`);
-    return data;
+    if (fetchError)
+      throw new Error(
+        `Error al obtener el producto actualizado: ${fetchError.message}`
+      );
+    if (!updatedProduct)
+      throw new Error("No se encontró el producto actualizado");
+
+    return updatedProduct;
   }
-
 }

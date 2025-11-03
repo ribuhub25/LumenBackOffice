@@ -6,9 +6,8 @@ export class Product {
   public href: string;
   public imageSrc: string;
   public imageAlt: string;
-  public discount: number;
   public status: number;
-  public brandId: number;
+  public brand_id: number;
   public stock: number;
   public description: string;
   public long_description: string;
