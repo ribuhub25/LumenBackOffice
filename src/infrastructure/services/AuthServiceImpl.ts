@@ -6,6 +6,11 @@ export class AuthServiceImpl {
     if (error) throw new Error(error.message);
   }
 
+  async signOut(): Promise<void> {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw new Error(error.message);
+  }
+
   async signIn(email: string, password: string): Promise<string> {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
