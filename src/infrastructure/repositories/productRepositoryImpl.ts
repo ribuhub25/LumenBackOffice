@@ -2,6 +2,7 @@ import { ProductRepository } from "../../domain/services/ProductRepository";
 import { Product } from "../../domain/models/Product";
 import { supabase } from "../config/supabaseClient";
 import getSupabaseClientWithToken from "../config/supabaseWithToken";
+import { ProductDTO } from "../../application/dto/ProductDTO";
 
 export class ProductRepositoryImpl implements ProductRepository {
   async save(product: Product): Promise<Product> {
@@ -39,16 +40,20 @@ export class ProductRepositoryImpl implements ProductRepository {
     if (error) throw new Error(error.message);
   }
 
-  async update(product: Product, token: string): Promise<Product> {
-    const { id, ...fieldsToUpdate } = product;
+  async update(product: ProductDTO, token: string): Promise<ProductDTO> {
+    const { id, name, price, brand_id, stock, status, categories } = product;
     const supabaseToken = getSupabaseClientWithToken(token);
     if (!id) throw new Error("El producto debe tener un ID válido");
 
-    const {
-      error: updateError,
-      data,
-      status,
-    } = await supabaseToken.from("product").update(fieldsToUpdate).eq("id", id);
+    const { error: updateError } = await supabaseToken.rpc("update_products", {
+      p_id: id,
+      p_name: name,
+      p_price: price,
+      p_brand_id: brand_id,
+      p_stock: stock,
+      p_status: status,
+      c_id: categories,
+    });
 
     if (updateError)
       throw new Error(
