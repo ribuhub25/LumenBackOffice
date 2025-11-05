@@ -5,16 +5,26 @@ import { GetProducts } from "../../../application/use-cases/Products/GetProducts
 import { SaveProduct } from "../../../application/use-cases/Products/SaveProduct";
 import { Product } from "../../../domain/models/Product";
 import { GetProduct } from "../../../application/use-cases/Products/GetProduct";
+import { UploadProduct } from "../../../application/use-cases/Products/UploadProduct";
 
 const repository = new ProductRepositoryImpl();
 const cu_create_product = new CreateProduct(repository); 
 const cu_get_products = new GetProducts(repository); 
 const cu_get_product = new GetProduct(repository);
 const cu_save_product = new SaveProduct(repository);
+const cu_upload_img_product = new UploadProduct(repository);
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const result = await cu_create_product.execute(req.body);
+    const token = req.supabaseToken;
+    const { name }: {name: string} = req.body;
+    if (!token) return res.status(401).json({ error: "Token no disponible" });
+    const filename = `${Date.now()}-${name.trim().replace(" ", "_").toLowerCase()}`;
+    const imgFile = req.file;
+    if (!imgFile) return res.status(400).json({ error: "No se recibió ninguna imagen" });
+    const imgSrc = await cu_upload_img_product.execute(imgFile,filename);
+    if(imgSrc != "") req.body.imageSrc = imgSrc;
+    const result = await cu_create_product.execute(req.body, token);
     res.status(201).json(result);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -52,28 +62,4 @@ export const saveProduct = async (req: Request, res: Response) => {
     console.error("❌ Error al guardar el producto:", error.message);
     res.status(500).json({ error: "Error interno del servidor" });
   }
-}
-
-function isProduct(obj: any): obj is Product {
-  return (
-    typeof obj.id === 'number' &&
-    typeof obj.created_at === 'string' &&
-    typeof obj.name === 'string' &&
-    typeof obj.price === 'number' &&
-    typeof obj.rating === 'number' &&
-    typeof obj.review_count === 'number' &&
-    typeof obj.href === 'string' &&
-    typeof obj.description === 'string' &&
-    typeof obj.imageSrc === 'string' &&
-    typeof obj.imageAlt === 'string' &&
-    typeof obj.discount === 'number' &&
-    typeof obj.status === 'number' &&
-    typeof obj.brand_Id === 'number' &&
-    typeof obj.stock === 'number' &&
-    typeof obj.brand_name === 'string' &&
-    typeof obj.code === 'string' &&
-    typeof obj.final_price === 'number' &&
-    typeof obj.is_new === 'number' &&
-    typeof obj.categories === 'object'
-  );
 }

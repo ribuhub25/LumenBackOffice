@@ -2,9 +2,11 @@
 import { ProductDTO } from "../../application/dto/ProductDTO";
 import PaginatedProductsResponse from "../../application/dto/ProductResponse";
 import { Product } from "../models/Product";
+import { Express } from "express";
+
 
 export interface ProductRepository {
-  save(product: Product): Promise<Product>;
+  save(product: Product, token: string): Promise<Product>;
   findById(id: number): Promise<Product | null>;
   findAll(
     search: string,
@@ -14,4 +16,5 @@ export interface ProductRepository {
   ): Promise<PaginatedProductsResponse>;
   delete(id: number): Promise<void>;
   update(product: ProductDTO, token: string): Promise<ProductDTO>;
+  upload(file: Express.Multer.File, fileName: string): Promise<string>;
 }

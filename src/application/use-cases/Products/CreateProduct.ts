@@ -5,9 +5,7 @@ import { ProductDTO } from "../../dto/ProductDTO";
 export class CreateProduct {
   constructor(private readonly repository: ProductRepository) {}
 
-  async execute(dto: ProductDTO): Promise<Product> {
-
-    const product: Product = new Product();
-    return await this.repository.save(product);
+  async execute(product: Product, token: string): Promise<Product> {
+    return await this.repository.save(product, token);
   }
 }

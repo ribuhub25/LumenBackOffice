@@ -4,15 +4,17 @@ import { supabase } from "../config/supabaseClient";
 import getSupabaseClientWithToken from "../config/supabaseWithToken";
 import { ProductDTO } from "../../application/dto/ProductDTO";
 import PaginatedProductsResponse from "../../application/dto/ProductResponse";
+import { Express } from "express";
+
 
 export class ProductRepositoryImpl implements ProductRepository {
-  async save(product: Product): Promise<Product> {
-    const { data, error } = await supabase
+  async save(product: Product, token: string): Promise<Product> {
+    const supabaseToken = getSupabaseClientWithToken(token);
+    const { data, error } = await supabaseToken
       .from("product")
       .insert([product])
-      .select()
+      .select("*")
       .single();
-
     if (error) throw new Error(error.message);
     return data;
   }
@@ -108,5 +110,24 @@ export class ProductRepositoryImpl implements ProductRepository {
       throw new Error("No se encontró el producto actualizado");
 
     return updatedProduct;
+  }
+
+  async upload(file: Express.Multer.File, fileName: string): Promise<string> {
+    const { data, error } = await supabase.storage
+      .from("products")
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false,
+      });
+
+    const publicUrl = supabase.storage
+      .from("products")
+      .getPublicUrl(fileName).data.publicUrl;
+
+    return publicUrl;
+    if (error) {
+      console.error("Error al subir imagen:", error);
+      return "";
+    }
   }
 }

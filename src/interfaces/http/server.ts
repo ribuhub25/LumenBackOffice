@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors');
 
+
 import productRoutes from "./routes/productRoutes";
 import authRoutes from "./routes/authRoutes";
 import brandRoutes from "./routes/brandRoutes";
@@ -13,9 +14,11 @@ app.use(cors({
   credentials: true // Si usas cookies o autenticación
 }));
 
-app.use(express.json());
 
 app.use("/api/products", productRoutes);
+
+app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/brands",brandRoutes);
 
