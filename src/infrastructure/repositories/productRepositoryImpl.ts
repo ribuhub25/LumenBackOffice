@@ -3,6 +3,7 @@ import { Product } from "../../domain/models/Product";
 import { supabase } from "../config/supabaseClient";
 import getSupabaseClientWithToken from "../config/supabaseWithToken";
 import { ProductDTO } from "../../application/dto/ProductDTO";
+import PaginatedProductsResponse from "../../application/dto/ProductResponse";
 
 export class ProductRepositoryImpl implements ProductRepository {
   async save(product: Product): Promise<Product> {
@@ -27,11 +28,44 @@ export class ProductRepositoryImpl implements ProductRepository {
     return data;
   }
 
-  async findAll(): Promise<Product[]> {
-    const { data, error } = await supabase.from("v_products").select("*");
+  async findAll(
+    search: string,
+    sort: string,
+    page: number,
+    limit: number
+  ): Promise<PaginatedProductsResponse> {
+    //calculate from and to
+    const from = (page - 1) * limit;
+    const to = page * limit - 1;
 
-    if (error) throw new Error(error.message);
-    return data || [];
+    let query = supabase
+      .from("v_products")
+      .select("*", { count: "exact" })
+      .range(from, to);
+
+    if (sort != "" && sort != null && sort != undefined) {
+      const [field, order] = sort.split(":");
+      const orderbool = order == "asc" ? true : false;
+      query = query.order(field, { ascending: orderbool });
+    }
+    if (search != "" && search != null && search != undefined) {
+      query = supabase.from("v_products").select("*", { count: "exact" });
+      if (!isNaN(Number(search)))
+        query = query.or(`stock.eq.${search},price.eq.${search}`);
+      else if (search == "activo") query = query.or(`status.eq.1`);
+      else if (search == "inactivo") query = query.or(`status.eq.0`);
+      else
+        query = query.or(`name.ilike.%${search}%,brand_name.ilike.%${search}%`);
+      query = query.range(from, to);
+    }
+    const { data, count, error } = await query;
+    if (error) {
+      throw new Error(`Error fetching products: ${error.message}`);
+    }
+    return {
+      products: data ?? [],
+      total: count ?? 0,
+    };
   }
 
   async delete(id: number): Promise<void> {
