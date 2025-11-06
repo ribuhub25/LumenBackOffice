@@ -1,5 +1,5 @@
 import { CategoryRepository } from "../../../domain/services/CategoryRepository";
-import { Option } from "../../dto/Option";
+import { Option } from "../../dto/utils/Option";
 
 export class GetCategoryOptions {
   constructor(private readonly repository: CategoryRepository) {}

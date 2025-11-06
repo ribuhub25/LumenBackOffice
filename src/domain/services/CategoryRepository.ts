@@ -1,5 +1,5 @@
 
-import { Option } from "../../application/dto/Option";
+import { Option } from "../../application/dto/utils/Option";
 import { Category } from "../models/Category";
 
 export interface CategoryRepository {

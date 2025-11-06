@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { LoginUser } from "../../../application/use-cases/LoginUser";
 import { AuthServiceImpl } from "../../../infrastructure/services/AuthServiceImpl";
-import { SignUpuser } from "../../../application/use-cases/SignUpUser";
-import { SignOutUser } from "../../../application/use-cases/SignOutUser";
+import { LoginUser } from "../../../application/use-cases/Auth/LoginUser";
+import { SignUpuser } from "../../../application/use-cases/Auth/SignUpUser";
+import { SignOutUser } from "../../../application/use-cases/Auth/SignOutUser";
 
 const authService = new AuthServiceImpl();
 const loginUser = new LoginUser(authService);

@@ -1,6 +1,6 @@
 
-import { BrandDTO } from "../../application/dto/BrandDTO";
-import { Option } from "../../application/dto/Option";
+import { BrandDTO } from "../../application/dto/models/BrandDTO";
+import { Option } from "../../application/dto/utils/Option";
 import { Brand } from "../../domain/models/Brand";
 import { BrandRepository } from "../../domain/services/BrandRepository";
 import { supabase } from "../config/supabaseClient";

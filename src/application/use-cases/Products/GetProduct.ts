@@ -1,6 +1,6 @@
 import { Product } from "../../../domain/models/Product";
 import { ProductRepository } from "../../../domain/services/ProductRepository";
-import { ProductDTO } from "../../dto/ProductDTO";
+import { ProductDTO } from "../../dto/models/ProductDTO";
 
 export class GetProduct {
   constructor(private readonly repository: ProductRepository) {}

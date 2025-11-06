@@ -1,4 +1,4 @@
-import { AuthService } from "../../domain/services/AuthService";
+import { AuthService } from "../../../domain/services/AuthService";
 
 export class SignOutUser {
   constructor(private readonly authService: AuthService) {}

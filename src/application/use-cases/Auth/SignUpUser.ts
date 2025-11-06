@@ -1,4 +1,5 @@
-import { AuthService } from "../../domain/services/AuthService";
+import { AuthService } from "../../../domain/services/AuthService";
+
 
 export class SignUpuser {
   constructor(private readonly authService: AuthService) {}

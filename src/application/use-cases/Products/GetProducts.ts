@@ -1,5 +1,6 @@
 import { ProductRepository } from "../../../domain/services/ProductRepository";
-import PaginatedProductsResponse from "../../dto/ProductResponse";
+import PaginatedResponse from "../../dto/format/PaginatedResponse";
+import { ProductDTO } from "../../dto/models/ProductDTO";
 
 export class GetProducts {
   constructor(private readonly repository: ProductRepository) {}
@@ -9,7 +10,7 @@ export class GetProducts {
     sort: string,
     page: number,
     limit: number
-  ): Promise<PaginatedProductsResponse> {
+  ): Promise<PaginatedResponse<ProductDTO>> {
     return await this.repository.findAll(search, sort, page, limit);
   }
 }

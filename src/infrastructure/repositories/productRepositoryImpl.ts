@@ -2,13 +2,14 @@ import { ProductRepository } from "../../domain/services/ProductRepository";
 import { Product } from "../../domain/models/Product";
 import { supabase } from "../config/supabaseClient";
 import getSupabaseClientWithToken from "../config/supabaseWithToken";
-import { ProductDTO } from "../../application/dto/ProductDTO";
-import PaginatedProductsResponse from "../../application/dto/ProductResponse";
+import { ProductDTO } from "../../application/dto/models/ProductDTO";
+import PaginatedResponse from "../../application/dto/format/PaginatedResponse";
 import { Express } from "express";
+import JsonResponse from "../../application/dto/format/JsonResponse";
 
 
 export class ProductRepositoryImpl implements ProductRepository {
-  async save(product: Product, token: string): Promise<Product> {
+  async add(product: Product, token: string): Promise<JsonResponse<Product>> {
     const supabaseToken = getSupabaseClientWithToken(token);
     const { data, error } = await supabaseToken
       .from("product")
@@ -16,7 +17,12 @@ export class ProductRepositoryImpl implements ProductRepository {
       .select("*")
       .single();
     if (error) throw new Error(error.message);
-    return data;
+    return {
+      status: 201,
+      message: "Producto creado exitosamente",
+      data: data ? [data] : null
+    };
+
   }
 
   async findById(id: number): Promise<Product | null> {
@@ -35,7 +41,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     sort: string,
     page: number,
     limit: number
-  ): Promise<PaginatedProductsResponse> {
+  ): Promise<PaginatedResponse<ProductDTO>> {
     //calculate from and to
     const from = (page - 1) * limit;
     const to = page * limit - 1;
@@ -62,23 +68,43 @@ export class ProductRepositoryImpl implements ProductRepository {
     }
     const { data, count, error } = await query;
     if (error) {
-      throw new Error(`Error fetching products: ${error.message}`);
+      let query = supabase
+      .from("v_products")
+      .select("*", { count: "exact" })
+      .range(from, to);
+      const { data, count, error } = await query;
+      if (error) throw new Error(`Error fetching products: ${error.message}`);
     }
     return {
-      products: data ?? [],
-      total: count ?? 0,
+      data: data ? data : null,
+      status: 200,
+      message: "petición exitosa",
+      sort: { field: sort ? sort.split(":")[0] : "", order: sort ? sort.split(":")[1] : ""},
+      pagination: {
+        page: page,
+        per_page: limit,
+        total_pages: Math.round(count/limit),
+        total_results: count
+      },
+      filters: search
     };
   }
 
-  async delete(id: number): Promise<void> {
-    const { error } = await supabase.from("product").delete().eq("id", id);
-
+  async delete(id: number, token: string): Promise<JsonResponse<[]>> {
+    const supabaseToken = getSupabaseClientWithToken(token);
+    const { error } = await supabaseToken.from("product").delete().eq("id", id);
     if (error) throw new Error(error.message);
+    return {
+      status: 200,
+      data: null,
+      message: "Producto elminado con éxito"
+    }
   }
 
-  async update(product: ProductDTO, token: string): Promise<ProductDTO> {
+  async update(product: ProductDTO, token: string): Promise<JsonResponse<ProductDTO>> {
     const { id, name, price, brand_id, stock, status, categories } = product;
     const supabaseToken = getSupabaseClientWithToken(token);
+
     if (!id) throw new Error("El producto debe tener un ID válido");
 
     const { error: updateError } = await supabaseToken.rpc("update_products", {
@@ -97,7 +123,7 @@ export class ProductRepositoryImpl implements ProductRepository {
       );
 
     const { data: updatedProduct, error: fetchError } = await supabase
-      .from("product")
+      .from("v_products")
       .select("*")
       .eq("id", id)
       .single();
@@ -109,7 +135,11 @@ export class ProductRepositoryImpl implements ProductRepository {
     if (!updatedProduct)
       throw new Error("No se encontró el producto actualizado");
 
-    return updatedProduct;
+    return {
+      status: 200,
+      message: "Producto modificado exitosamente",
+      data: updatedProduct ? [updatedProduct] : null
+    };
   }
 
   async upload(file: Express.Multer.File, fileName: string): Promise<string> {

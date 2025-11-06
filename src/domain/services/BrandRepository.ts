@@ -1,4 +1,4 @@
-import { Option } from "../../application/dto/Option";
+import { Option } from "../../application/dto/utils/Option";
 import { Brand } from "../models/Brand";
 
 export interface BrandRepository {

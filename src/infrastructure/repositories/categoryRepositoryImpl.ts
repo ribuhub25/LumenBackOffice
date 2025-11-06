@@ -1,5 +1,5 @@
-import { CategoryDTO } from "../../application/dto/CategoryDTO";
-import { Option } from "../../application/dto/Option";
+import { CategoryDTO } from "../../application/dto/models/CategoryDTO";
+import { Option } from "../../application/dto/utils/Option";
 import { Category } from "../../domain/models/Category";
 import { CategoryRepository } from "../../domain/services/CategoryRepository";
 import { supabase } from "../config/supabaseClient";
