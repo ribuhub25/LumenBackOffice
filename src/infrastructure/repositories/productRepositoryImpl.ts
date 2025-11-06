@@ -37,58 +37,64 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   async findAll(
-    search: string,
-    sort: string,
-    page: number,
-    limit: number
-  ): Promise<PaginatedResponse<ProductDTO>> {
-    //calculate from and to
-    const from = (page - 1) * limit;
-    const to = page * limit - 1;
+  search: string,
+  sort: string,
+  page: number,
+  limit: number
+): Promise<PaginatedResponse<ProductDTO>> {
+  const from = (page - 1) * limit;
+  const to = page * limit - 1;
 
-    let query = supabase
-      .from("v_products")
-      .select("*", { count: "exact" })
-      .range(from, to);
+  let query = supabase
+    .from("v_products")
+    .select("*", { count: "exact" });
 
-    if (sort != "" && sort != null && sort != undefined) {
-      const [field, order] = sort.split(":");
-      const orderbool = order == "asc" ? true : false;
-      query = query.order(field, { ascending: orderbool });
+  // 🔍 Aplicar filtros
+  if (search && search.trim() !== "") {
+    if (!isNaN(Number(search))) {
+      query = query.or(`stock.eq.${search},price.eq.${search}`);
+    } else if (search.toLowerCase() === "activo") {
+      query = query.eq("status", 1);
+    } else if (search.toLowerCase() === "inactivo") {
+      query = query.eq("status", 0);
+    } else {
+      query = query.or(`name.ilike.%${search}%,brand_name.ilike.%${search}%`);
     }
-    if (search != "" && search != null && search != undefined) {
-      query = supabase.from("v_products").select("*", { count: "exact" });
-      if (!isNaN(Number(search)))
-        query = query.or(`stock.eq.${search},price.eq.${search}`);
-      else if (search == "activo") query = query.or(`status.eq.1`);
-      else if (search == "inactivo") query = query.or(`status.eq.0`);
-      else
-        query = query.or(`name.ilike.%${search}%,brand_name.ilike.%${search}%`);
-      query = query.range(from, to);
-    }
-    const { data, count, error } = await query;
-    if (error) {
-      let query = supabase
-      .from("v_products")
-      .select("*", { count: "exact" })
-      .range(from, to);
-      const { data, count, error } = await query;
-      if (error) throw new Error(`Error fetching products: ${error.message}`);
-    }
-    return {
-      data: data ? data : null,
-      status: 200,
-      message: "petición exitosa",
-      sort: { field: sort ? sort.split(":")[0] : "", order: sort ? sort.split(":")[1] : ""},
-      pagination: {
-        page: page,
-        per_page: limit,
-        total_pages: Math.round(count/limit),
-        total_results: count
-      },
-      filters: search
-    };
   }
+
+  // 🔃 Aplicar ordenamiento
+  if (sort && sort.includes(":")) {
+    const [field, order] = sort.split(":");
+    query = query.order(field, { ascending: order === "asc" });
+  }
+
+  // 📦 Aplicar paginación
+  query = query.range(from, to);
+
+  // 🚀 Ejecutar consulta
+  const { data, count, error } = await query;
+
+  if (error) {
+    throw new Error(`Error fetching products: ${error.message}`);
+  }
+
+  return {
+    data: data ?? null,
+    status: 200,
+    message: "Petición exitosa",
+    sort: {
+      field: sort ? sort.split(":")[0] : "",
+      order: sort ? sort.split(":")[1] : ""
+    },
+    pagination: {
+      page,
+      per_page: limit,
+      total_pages: count ? Math.ceil(count / limit) : 0,
+      total_results: count ?? 0
+    },
+    filters: search
+  };
+}
 
   async delete(id: number, token: string): Promise<JsonResponse<[]>> {
     const supabaseToken = getSupabaseClientWithToken(token);

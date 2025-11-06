@@ -60,7 +60,7 @@ export const saveProduct = async (req: Request, res: Response) => {
     const result = await cu_save_product.execute(req.body, token);
     res.status(200).json(result);
   } catch (error) {
-    console.error("❌ Error al guardar el producto:", error.message);
+    console.error("❌ Error al crear el producto:", error.message);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }
@@ -73,7 +73,7 @@ export const removeProduct = async (req: Request, res: Response) => {
     res.status(200).json(result);
   }
   catch (error) {
-    console.error("❌ Error al guardar el producto:", error.message);
+    console.error("❌ Error al remover el producto:", error.message);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }
