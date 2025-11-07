@@ -69,8 +69,11 @@ export class ProductRepositoryImpl implements ProductRepository {
   }
 
   // 📦 Aplicar paginación
-  query = query.range(from, to);
-
+  if (search && search.trim() != ""){
+    query = query.range(0, limit - 1);
+    page = 1;
+  }
+  else query = query.range(from, to);
   // 🚀 Ejecutar consulta
   const { data, count, error } = await query;
 
