@@ -40,7 +40,9 @@ export class ProductRepositoryImpl implements ProductRepository {
   search: string,
   sort: string,
   page: number,
-  limit: number
+  limit: number,
+  marca: string[],
+  categoria: string[]
 ): Promise<PaginatedResponse<ProductDTO>> {
   const from = (page - 1) * limit;
   const to = page * limit - 1;
@@ -48,6 +50,7 @@ export class ProductRepositoryImpl implements ProductRepository {
   let query = supabase
     .from("v_products")
     .select("*", { count: "exact" });
+
 
   // 🔍 Aplicar filtros
   if (search && search.trim() !== "") {
@@ -60,6 +63,15 @@ export class ProductRepositoryImpl implements ProductRepository {
     } else {
       query = query.or(`name.ilike.%${search}%,brand_name.ilike.%${search}%`);
     }
+  }
+
+  //Aplicar filtros
+  if(categoria){
+    if(categoria.length == 1) query = query.overlaps("categories_id",[categoria]);
+    else query = query.overlaps("categories_id",categoria);
+  }
+  if(marca){
+    query = query.in("brand_id",marca);
   }
 
   // 🔃 Aplicar ordenamiento

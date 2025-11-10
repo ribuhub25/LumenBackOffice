@@ -9,8 +9,10 @@ export class GetProducts {
     search: string,
     sort: string,
     page: number,
-    limit: number
+    limit: number,
+    marca: string[],
+    categoria: string[]
   ): Promise<PaginatedResponse<ProductDTO>> {
-    return await this.repository.findAll(search, sort, page, limit);
+    return await this.repository.findAll(search, sort, page, limit, marca, categoria);
   }
 }

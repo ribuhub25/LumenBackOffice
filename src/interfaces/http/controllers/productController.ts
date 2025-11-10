@@ -34,8 +34,8 @@ export const createProduct = async (req: Request, res: Response) => {
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
-    const { search, sort, page, limit } = req.query;
-    const result = await cu_get_products.execute(search, sort, page, limit);
+    const { search, sort, page, limit, marca, categoria } = req.query;
+    const result = await cu_get_products.execute(search, sort, page, limit, marca, categoria);
     res.status(200).json(result);
   } catch (error) {
     console.error("❌ Error al obtener productos:", error.message);
