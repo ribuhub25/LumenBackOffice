@@ -1,6 +1,7 @@
+import { AuthService } from "../../domain/services/AuthService";
 import { supabase } from "../config/supabaseClient";
 
-export class AuthServiceImpl {
+export class AuthServiceImpl implements AuthService {
   async signUp(email: string, password: string): Promise<void> {
     const { error } = await supabase.auth.signUp({ email, password });
     if (error) throw new Error(error.message);

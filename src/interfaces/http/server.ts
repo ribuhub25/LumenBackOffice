@@ -1,10 +1,10 @@
 const express = require("express");
 const cors = require('cors');
 
-
 import productRoutes from "./routes/productRoutes";
 import authRoutes from "./routes/authRoutes";
 import brandRoutes from "./routes/brandRoutes";
+import filterRoutes from "./routes/filterRoutes";
 
 const app = express();
 
@@ -20,6 +20,7 @@ app.use("/api/products", productRoutes);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/filter", filterRoutes);
 app.use("/api/brands",brandRoutes);
 
 export default app;
