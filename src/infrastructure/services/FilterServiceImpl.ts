@@ -38,8 +38,8 @@ export class FilterServiceImpl implements FilterService {
       }
       return {
         results: {
-          brands: dataBrand.map((b) => b.name),
-          categories: dataCategory.map((c) => c.name),
+          brands: dataBrand,
+          categories: dataCategory,
           products: dataProduct,
           keywords: [],
         },
