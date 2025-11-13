@@ -5,6 +5,7 @@ import productRoutes from "./routes/productRoutes";
 import authRoutes from "./routes/authRoutes";
 import brandRoutes from "./routes/brandRoutes";
 import filterRoutes from "./routes/filterRoutes";
+import categoryRoutes from "./routes/categoryRoutes";
 
 const app = express();
 
@@ -22,5 +23,6 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/filter", filterRoutes);
 app.use("/api/brands",brandRoutes);
+app.use("/api/categories",categoryRoutes);
 
 export default app;

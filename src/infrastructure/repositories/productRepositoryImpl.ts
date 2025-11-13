@@ -103,7 +103,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     },
     pagination: {
       page,
-      per_page: limit,
+      per_page: data.length,
       total_pages: count ? Math.ceil(count / limit) : 0,
       total_results: count ?? 0
     },
