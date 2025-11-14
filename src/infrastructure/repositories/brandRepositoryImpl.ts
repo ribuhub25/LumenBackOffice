@@ -29,7 +29,8 @@ export class BrandRepositoryImpl implements BrandRepository {
     const supabaseToken = getSupabaseClientWithToken(token);
     const { data, error } = await supabaseToken
       .from("brand")
-      .update(brand)
+      .update({ name: brand.name, code: brand.code })
+      .eq("id", brand.id)
       .select()
       .single();
 

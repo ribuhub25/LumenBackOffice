@@ -13,7 +13,8 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     const supabaseToken = getSupabaseClientWithToken(token);
     const { data, error } = await supabaseToken
       .from("category")
-      .update(category)
+      .update({ name: category.name })
+      .eq("id",category.id)
       .select()
       .single();
 
