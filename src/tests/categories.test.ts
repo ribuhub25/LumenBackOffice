@@ -23,3 +23,4 @@ describe('GET /', () => {
     expect(res.body).toEqual(RESPONSE_JSON);
   });
 });
+
