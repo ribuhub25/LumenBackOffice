@@ -1,6 +1,4 @@
 import { ProductRepository } from "../../../domain/services/ProductRepository";
-import { ProductDTO } from "../../dto/models/ProductDTO";
-import { Express } from "express";
 
 
 export class UploadProduct {

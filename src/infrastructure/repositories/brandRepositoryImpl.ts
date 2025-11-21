@@ -21,7 +21,7 @@ export class BrandRepositoryImpl implements BrandRepository {
     return {
       status: 201,
       message: "Marca creada exitosamente",
-      data: data ? [data] : null
+      data: data ? [data] : []
     };
   }
 
@@ -38,7 +38,7 @@ export class BrandRepositoryImpl implements BrandRepository {
     return {
       status: 201,
       message: "Marca actualizada exitosamente",
-      data: data ? [data] : null
+      data: data ? [data] : []
     };
   }
 
@@ -119,7 +119,7 @@ export class BrandRepositoryImpl implements BrandRepository {
     return {
       status: 201,
       message: "Marca eliminado con éxito",
-      data: null
+      data: []
     };
   }
 }

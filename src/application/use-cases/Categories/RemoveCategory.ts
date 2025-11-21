@@ -1,4 +1,3 @@
-import { Category } from "../../../domain/models/Category";
 import { CategoryRepository } from "../../../domain/services/CategoryRepository";
 import JsonResponse from "../../dto/format/JsonResponse";
 

@@ -1,4 +1,4 @@
-const dotenv = require("dotenv");
+import dotenv from 'dotenv';
 import app from "./interfaces/http/server";
 
 dotenv.config();

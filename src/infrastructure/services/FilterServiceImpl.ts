@@ -3,20 +3,22 @@ import { FilterService } from "../../domain/services/FilterService";
 import { supabase } from "../config/supabaseClient";
 
 export class FilterServiceImpl implements FilterService {
-  async getResultsInAdmin(search: string, token: string): Promise<void> {}
+  async getResultsInAdmin(search: string, token: string): Promise<void> {
+    throw new Error("Metodo no implementado") 
+  }
   async getResultsInStore(search: string): Promise<SearchResponse> {
     if (search && search.trim() !== "") {
       //BUSQUEDA DE MARCAS
-      let brands = supabase
+      const brands = supabase
         .from("brand")
         .select("*", { count: "exact" })
         .ilike("name", `%${search}%`);
-      let products = supabase
+      const products = supabase
         .from("v_products")
         .select("*", { count: "exact" })
         .eq("status", 1)
         .or(`name.ilike.%${search}%,brand_name.ilike.%${search}%`);
-      let categories = supabase
+      const categories = supabase
         .from("category")
         .select("*", { count: "exact" })
         .ilike("name", `%${search}%`);
@@ -43,7 +45,7 @@ export class FilterServiceImpl implements FilterService {
           products: dataProduct,
           keywords: [],
         },
-        total: cBrand + cCategory + cProduct
+        total: (cBrand ?? 0) + (cCategory ?? 0) + (cProduct ?? 0)
       };
     }
     return {

@@ -1,5 +1,3 @@
-import { Brand } from "../../../domain/models/Brand";
-import { Category } from "../../../domain/models/Category";
 import { CategoryRepository } from "../../../domain/services/CategoryRepository";
 import PaginatedResponse from "../../dto/format/PaginatedResponse";
 import { CategoryDTO } from "../../dto/models/CategoryDTO";

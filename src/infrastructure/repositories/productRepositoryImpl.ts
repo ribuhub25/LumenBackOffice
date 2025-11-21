@@ -4,14 +4,14 @@ import { supabase } from "../config/supabaseClient";
 import getSupabaseClientWithToken from "../config/supabaseWithToken";
 import { ProductDTO } from "../../application/dto/models/ProductDTO";
 import PaginatedResponse from "../../application/dto/format/PaginatedResponse";
-import { Express } from "express";
 import JsonResponse from "../../application/dto/format/JsonResponse";
+import { PostgrestError, PostgrestSingleResponse } from "@supabase/supabase-js";
 
 
 export class ProductRepositoryImpl implements ProductRepository {
   async add(product: Product, token: string): Promise<JsonResponse<Product>> {
     const supabaseToken = getSupabaseClientWithToken(token);
-    const { data, error } = await supabaseToken
+    const { data, error } : PostgrestSingleResponse<Product | null> = await supabaseToken
       .from("product")
       .insert([product])
       .select("*")
@@ -20,9 +20,8 @@ export class ProductRepositoryImpl implements ProductRepository {
     return {
       status: 201,
       message: "Producto creado exitosamente",
-      data: data ? [data] : null
+      data: data ? [data] : []
     };
-
   }
 
   async findById(id: number): Promise<Product | null> {
@@ -117,7 +116,7 @@ export class ProductRepositoryImpl implements ProductRepository {
     if (error) throw new Error(error.message);
     return {
       status: 200,
-      data: null,
+      data: [],
       message: "Producto elminado con éxito"
     }
   }
@@ -143,7 +142,7 @@ export class ProductRepositoryImpl implements ProductRepository {
         `Error al actualizar el producto: ${updateError.message}`
       );
 
-    const { data: updatedProduct, error: fetchError } = await supabase
+    const { data: updatedProduct, error: fetchError } : {data: ProductDTO | null, error: PostgrestError | null} = await supabase
       .from("v_products")
       .select("*")
       .eq("id", id)
@@ -159,12 +158,12 @@ export class ProductRepositoryImpl implements ProductRepository {
     return {
       status: 200,
       message: "Producto modificado exitosamente",
-      data: updatedProduct ? [updatedProduct] : null
+      data: updatedProduct ? [updatedProduct] : []
     };
   }
 
   async upload(file: Express.Multer.File, fileName: string): Promise<string> {
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from("products")
       .upload(fileName, file.buffer, {
         contentType: file.mimetype,
@@ -174,11 +173,11 @@ export class ProductRepositoryImpl implements ProductRepository {
     const publicUrl = supabase.storage
       .from("products")
       .getPublicUrl(fileName).data.publicUrl;
-
-    return publicUrl;
     if (error) {
       console.error("Error al subir imagen:", error);
       return "";
     }
+
+    return publicUrl;
   }
 }

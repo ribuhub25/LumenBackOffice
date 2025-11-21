@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { addBrand, getBrandOptions, getBrands, removeBrand, updateBrand } from "../controllers/brandController";
-import { getCategoryOptions } from "../controllers/categoryController";
 import { authMiddleware } from "../middleware/authMiddleware";
 
 

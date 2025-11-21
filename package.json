@@ -18,8 +18,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "testeo-lumen",
-    "start": "ts-node src/index.ts"
+    "test": "jest",
+    "start": "ts-node src/index.ts",
+    "lint": "eslint src --ext .ts,.js --fix"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.74.0",
@@ -30,8 +31,24 @@
     "multer": "^2.0.2"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/cors": "^2.8.19",
     "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.5",
+    "@types/jest": "^30.0.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/multer": "^2.0.0",
+    "@types/supertest": "^6.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "eslint": "^9.39.1",
+    "globals": "^16.5.0",
+    "jest": "^30.2.0",
+    "jiti": "^2.6.1",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
   }
 }

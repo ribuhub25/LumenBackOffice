@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 
 export const authMiddleware = (
@@ -22,7 +22,7 @@ export const authMiddleware = (
       return res.status(401).json({ error: "Token inválido" });
     }
 
-    const exp = (decoded as any).exp;
+    const exp = (decoded).exp;
     const now = Math.floor(Date.now() / 1000);
 
     if (exp && exp < now) {

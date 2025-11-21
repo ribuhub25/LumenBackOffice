@@ -1,5 +1,5 @@
-const express = require("express");
-const cors = require('cors');
+import express from "express"
+import cors from "cors"
 
 import productRoutes from "./routes/productRoutes";
 import authRoutes from "./routes/authRoutes";
@@ -10,7 +10,7 @@ import categoryRoutes from "./routes/categoryRoutes";
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5173','http://localhost:5174'], 
+  origin: ['http://localhost:5173', 'http://localhost:5174'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true // Si usas cookies o autenticación
 }));
@@ -22,7 +22,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/filter", filterRoutes);
-app.use("/api/brands",brandRoutes);
-app.use("/api/categories",categoryRoutes);
+app.use("/api/brands", brandRoutes);
+app.use("/api/categories", categoryRoutes);
 
 export default app;

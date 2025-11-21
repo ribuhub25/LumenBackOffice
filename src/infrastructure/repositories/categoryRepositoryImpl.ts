@@ -22,7 +22,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     return {
       status: 201,
       message: "Categoria actualizada exitosamente",
-      data: data ? [data] : null
+      data: data ? [data] : []
     };
   }
   async save(category: Category, token: string): Promise<JsonResponse<Category>> {
@@ -37,7 +37,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     return {
       status: 201,
       message: "Categoria creada exitosamente",
-      data: data ? [data] : null
+      data: data ? [data] : []
     };
   }
   async findById(id: number): Promise<Category | null> {
@@ -115,7 +115,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
     return {
       status: 201,
       message: "Categoria eliminada con éxito",
-      data: null
+      data: []
     };
   }
 }

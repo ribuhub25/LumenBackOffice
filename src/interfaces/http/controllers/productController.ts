@@ -28,27 +28,27 @@ export const createProduct = async (req: Request, res: Response) => {
     const result = await cu_create_product.execute(req.body, token);
     res.status(201).json(result);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ error: error });
   }
 };
 
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const { search, sort, page, limit, marca, categoria } = req.query;
-    const result = await cu_get_products.execute(search, sort, page, limit, marca, categoria);
+    const result = await cu_get_products.execute(search ? String(search) : "", sort ? String(sort) : "", page ? parseInt(String(page)) : 0, limit ? parseInt(String(limit)) : 0, marca ? Array<string>(parseInt(String(marca))) : [""], categoria ? Array<string>(parseInt(String(categoria))) : [""]);
     res.status(200).json(result);
   } catch (error) {
-    console.error("❌ Error al obtener productos:", error.message);
+    console.error("❌ Error al obtener productos:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
 
 export const getProduct = async (req: Request, res: Response) => {
   try {
-    const result = await cu_get_product.execute(req.params.id);
+    const result = await cu_get_product.execute(parseInt(req.params.id));
     res.status(200).json(result);
   } catch (error) {
-    console.error("❌ Error al obtener el producto:", error.message);
+    console.error("❌ Error al obtener el producto:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 };
@@ -60,7 +60,7 @@ export const saveProduct = async (req: Request, res: Response) => {
     const result = await cu_save_product.execute(req.body, token);
     res.status(200).json(result);
   } catch (error) {
-    console.error("❌ Error al crear el producto:", error.message);
+    console.error("❌ Error al crear el producto:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }
@@ -69,11 +69,11 @@ export const removeProduct = async (req: Request, res: Response) => {
   try {
     const token = req.supabaseToken;
     if (!token) return res.status(401).json({ error: "Token no disponible" });
-    const result = await cu_remove_product.execute(req.params.id, token);
+    const result = await cu_remove_product.execute(parseInt(req.params.id), token);
     res.status(200).json(result);
   }
   catch (error) {
-    console.error("❌ Error al remover el producto:", error.message);
+    console.error("❌ Error al remover el producto:", error);
     res.status(500).json({ error: "Error interno del servidor" });
   }
 }

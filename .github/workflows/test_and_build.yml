@@ -1,0 +1,23 @@
+# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+
+name: Test and Build
+
+on:
+  push:
+    branches: ["deployment"]
+
+jobs:
+  test_and_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node 22.14.0
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.14.0
+      - name: Install dependencies
+        run: npm i  
+      - name: Run Tests
+        working-directory: src/tests
+        run: npm test

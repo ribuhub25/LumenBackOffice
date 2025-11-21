@@ -1,6 +1,7 @@
 // src/infrastructure/config/supabaseClient.ts
+import dotenv from "dotenv"
 import { createClient } from "@supabase/supabase-js";
-const dotenv = require("dotenv");
+
 
 dotenv.config();
 

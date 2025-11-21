@@ -1,5 +1,5 @@
-const multer = require("multer");
-const express = require("express");
+import multer from "multer"
+import express from "express"
 import { Router } from "express";
 import { createProduct, getProduct, getProducts, removeProduct, saveProduct } from "../controllers/productController";
 import { authMiddleware } from "../middleware/authMiddleware";

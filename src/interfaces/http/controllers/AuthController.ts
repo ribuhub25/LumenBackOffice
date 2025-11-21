@@ -14,17 +14,17 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const token = await loginUser.execute(email, password);
     res.status(200).json({ access_token: token });
-  } catch (error: any) {
-    res.status(401).json({ error: error.message });
+  } catch (error) {
+    res.status(401).json({ error: error });
   }
 };
 
 export const signOut = async (req: Request, res: Response): Promise<void> => {
   try {
-    const response = await signOut;
+    await signOutUser.execute();
     res.status(200).json({ message: "Sesión cerrada correctamente" });
-  } catch (error: any) {
-    res.status(401).json({ error: error.message });
+  } catch (error) {
+    res.status(401).json({ error: error });
   }
 };
 
@@ -33,8 +33,8 @@ export const signUp = async (req: Request, res: Response) => {
     try {
       await signUpUser.execute(email, password);
       res.status(201).json({ message: "Usuario registrado exitosamente" });
-    } catch (error: any) {
-      res.status(400).json({ error: error.message });
+    } catch (error) {
+      res.status(400).json({ error: error });
     }
 
 }
