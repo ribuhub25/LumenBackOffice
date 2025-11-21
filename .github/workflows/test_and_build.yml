@@ -21,3 +21,5 @@ jobs:
       - name: Run Tests
         working-directory: src/tests
         run: npm test
+      - name: Run Slint
+        run: npm run lint
